@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: httpd-diego-test
+  name: httpd-diego-test
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: httpd-diego-test
+  template:
+    metadata:
+      labels:
+        app: httpd-diego-test
+    spec:
+      containers:
+        - image: httpd:alpine
+          name: httpd
+          # command: ["/bin/bash", "-c"] # override the default command
+          # args: ["sleep 5; exit 1"] # sleep for 5 seconds then exit with an error
+  strategy:
+    type: RollingUpdate # It is RollingUpdate by default the valid values: RollingUpdate, Recreate
+    rollingUpdate:
+      maxUnavailable: 1 # max number of pods that can be created during update process
+      maxSurge: 1 # mas number of pods that can be created over the desired number of pods
